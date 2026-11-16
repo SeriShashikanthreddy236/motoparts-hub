@@ -87,3 +87,19 @@ Completed Tasks:
 - React Setup Completed
 - Folder Structure Organized
 - README V1 Created
+
+
+## Day 2 Completed
+
+### Backend Foundation
+- Spring Boot Application Setup
+- MySQL Integration
+- JPA/Hibernate Configuration
+- Common API Response Structure
+- Global Exception Handling
+- Spring Security Configuration
+- Swagger/OpenAPI Documentation
+
+### Tested Endpoints
+- GET /test
+- GET /test-error
