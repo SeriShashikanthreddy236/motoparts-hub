@@ -18,9 +18,12 @@ import com.motoparts.product.service.ProductFitmentService;
 import com.motoparts.response.ApiResponse;
 
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/fitments")
+@Tag(name = "Product Fitments", description = "Map catalog products to compatible vehicle variants")
 public class ProductFitmentController {
 
 	private final ProductFitmentService productFitmentService;
@@ -31,6 +34,7 @@ public class ProductFitmentController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Create a product fitment", description = "Associates a product with a vehicle variant, optional model year, or fitment details.")
 	public ApiResponse<ProductFitment> createFitment(@Valid @RequestBody ProductFitmentRequest request) {
 
 		return new ApiResponse<>(true, "Product fitment created successfully",
@@ -38,6 +42,7 @@ public class ProductFitmentController {
 	}
 
 	@GetMapping("/product/{productId}")
+	@Operation(summary = "List fitments by product", description = "Retrieves every vehicle fitment associated with a product.")
 	public ApiResponse<List<ProductFitment>> getFitmentsByProduct(@PathVariable Long productId) {
 
 		return new ApiResponse<>(true, "Product fitments fetched successfully",
@@ -45,6 +50,7 @@ public class ProductFitmentController {
 	}
 
 	@GetMapping("/variant/{variantId}")
+	@Operation(summary = "List products by vehicle variant", description = "Retrieves fitments that apply to a specific vehicle variant.")
 	public ApiResponse<List<ProductFitment>> getFitmentsByVariant(@PathVariable Long variantId) {
 
 		return new ApiResponse<>(true, "Variant fitments fetched successfully",
@@ -52,6 +58,7 @@ public class ProductFitmentController {
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Delete a fitment", description = "Removes a product-to-vehicle compatibility mapping.")
 	public ApiResponse<String> deleteFitment(@PathVariable Long id) {
 
 		productFitmentService.deleteFitment(id);

@@ -18,9 +18,12 @@ import com.motoparts.vehicle.entity.VehicleMake;
 import com.motoparts.vehicle.service.VehicleMakeService;
 
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/vehicle-makes")
+@Tag(name = "Vehicle Makes", description = "Manage vehicle manufacturers used for catalog fitment")
 public class VehicleMakeController {
 
 	private final VehicleMakeService vehicleMakeService;
@@ -31,6 +34,7 @@ public class VehicleMakeController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Create a vehicle make", description = "Adds a vehicle manufacturer such as a car or motorcycle brand.")
 	public ApiResponse<VehicleMake> createMake(@Valid @RequestBody VehicleMakeRequest request) {
 
 		VehicleMake make = vehicleMakeService.createMake(request);
@@ -39,24 +43,28 @@ public class VehicleMakeController {
 	}
 
 	@GetMapping
+	@Operation(summary = "List vehicle makes", description = "Returns all configured vehicle manufacturers.")
 	public ApiResponse<List<VehicleMake>> getAllMakes() {
 
 		return new ApiResponse<>(true, "Vehicle makes fetched successfully", vehicleMakeService.getAllMakes());
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Get vehicle make", description = "Retrieves a vehicle manufacturer by ID.")
 	public ApiResponse<VehicleMake> getMakeById(@PathVariable Long id) {
 
 		return new ApiResponse<>(true, "Vehicle make fetched successfully", vehicleMakeService.getMakeById(id));
 	}
 
 	@PutMapping("/{id}")
+	@Operation(summary = "Update a vehicle make", description = "Updates the name or configuration of a vehicle manufacturer.")
 	public ApiResponse<VehicleMake> updateMake(@PathVariable Long id, @Valid @RequestBody VehicleMakeRequest request) {
 
 		return new ApiResponse<>(true, "Vehicle make updated successfully", vehicleMakeService.updateMake(id, request));
 	}
 
 	@PatchMapping("/{id}/status")
+	@Operation(summary = "Update vehicle make status", description = "Activates or deactivates a vehicle manufacturer.")
 	public ApiResponse<VehicleMake> updateStatus(@PathVariable Long id, @Valid @RequestBody StatusRequest request) {
 
 		return new ApiResponse<>(true, "Vehicle make status updated successfully",

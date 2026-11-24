@@ -13,10 +13,13 @@ import com.motoparts.seller.service.SellerService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/admin/sellers")
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Seller Administration", description = "Administrative review and approval of seller applications")
 public class AdminSellerController {
 
 	private final SellerService sellerService;
@@ -27,6 +30,7 @@ public class AdminSellerController {
 	}
 
 	@PatchMapping("/{id}/approve")
+	@Operation(summary = "Approve a seller application", description = "Approves the seller application and grants seller privileges.")
 	public ApiResponse<SellerResponse> approveSeller(@PathVariable Long id) {
 
 		SellerResponse response = sellerService.approveSeller(id);
@@ -35,6 +39,7 @@ public class AdminSellerController {
 	}
 
 	@PatchMapping("/{id}/reject")
+	@Operation(summary = "Reject a seller application", description = "Rejects the application and records the administrator's rejection reason.")
 	public ApiResponse<SellerResponse> rejectSeller(@PathVariable Long id,
 			@Valid @RequestBody SellerRejectionRequest request) {
 

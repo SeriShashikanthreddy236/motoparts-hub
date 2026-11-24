@@ -16,9 +16,12 @@ import com.motoparts.category.service.CategoryService;
 import com.motoparts.response.ApiResponse;
 
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/categories")
+@Tag(name = "Categories", description = "Browse and manage product categories")
 public class CategoryController {
 
 	private final CategoryService categoryService;
@@ -30,6 +33,7 @@ public class CategoryController {
 
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(summary = "Create a category", description = "Creates a product category. This operation requires administrator privileges.")
 	public ApiResponse<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest request) {
 
 		CategoryResponse response = categoryService.createCategory(request);
@@ -38,12 +42,14 @@ public class CategoryController {
 	}
 
 	@GetMapping
+	@Operation(summary = "List categories", description = "Returns all available product categories.")
 	public ApiResponse<List<CategoryResponse>> getAllCategories() {
 
 		return new ApiResponse<>(true, "Categories retrieved successfully", categoryService.getAllCategories());
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Get category details", description = "Retrieves a product category by its ID.")
 	public ApiResponse<CategoryResponse> getCategoryById(@PathVariable Long id) {
 
 		return new ApiResponse<>(true, "Category retrieved successfully", categoryService.getCategoryById(id));

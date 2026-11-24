@@ -16,9 +16,12 @@ import com.motoparts.order.dto.OrderResponse;
 import com.motoparts.order.enums.OrderStatus;
 import com.motoparts.order.service.OrderService;
 import com.motoparts.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/orders")
+@Tag(name = "Orders", description = "Place and track customer orders and manage order status")
 public class OrderController {
 
 	private final OrderService orderService;
@@ -29,12 +32,14 @@ public class OrderController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Place an order", description = "Converts the authenticated customer's cart into a new order.")
 	public ApiResponse<OrderResponse> placeOrder(Authentication authentication) {
 
 		return new ApiResponse<>(true, "Order placed successfully", orderService.placeOrder(authentication.getName()));
 	}
 
 	@GetMapping
+	@Operation(summary = "List my orders", description = "Returns the order history for the authenticated customer.")
 	public ApiResponse<List<OrderResponse>> getMyOrders(Authentication authentication) {
 
 		return new ApiResponse<>(true, "Orders retrieved successfully",
@@ -42,6 +47,7 @@ public class OrderController {
 	}
 
 	@GetMapping("/{orderId}")
+	@Operation(summary = "Get an order", description = "Retrieves details for an order owned by the authenticated user.")
 	public ApiResponse<OrderResponse> getOrderById(@PathVariable Long orderId, Authentication authentication) {
 
 		return new ApiResponse<>(true, "Order retrieved successfully",
@@ -50,6 +56,7 @@ public class OrderController {
 
 	@PreAuthorize("hasAnyRole('ADMIN','SELLER')")
 	@PatchMapping("/{orderId}/status")
+	@Operation(summary = "Update order status", description = "Changes an order status. This operation is available to administrators and sellers.")
 	public ApiResponse<OrderResponse> updateOrderStatus(@PathVariable Long orderId, @RequestParam OrderStatus status) {
 
 		return new ApiResponse<>(true, "Order status updated successfully",
@@ -58,6 +65,7 @@ public class OrderController {
 
 	@PreAuthorize("hasRole('SELLER')")
 	@GetMapping("/seller")
+	@Operation(summary = "List seller orders", description = "Returns orders containing products sold by the authenticated seller.")
 	public ApiResponse<List<OrderResponse>> getSellerOrders(Authentication authentication) {
 
 		return new ApiResponse<>(true, "Seller orders fetched successfully",

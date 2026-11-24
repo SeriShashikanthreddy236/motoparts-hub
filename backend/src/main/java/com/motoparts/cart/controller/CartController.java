@@ -17,9 +17,12 @@ import com.motoparts.cart.service.CartService;
 import com.motoparts.response.ApiResponse;
 
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/cart")
+@Tag(name = "Shopping Cart", description = "Manage products and quantities in the authenticated customer's cart")
 public class CartController {
 
 	private final CartService cartService;
@@ -30,6 +33,7 @@ public class CartController {
 	}
 
 	@PostMapping("/items")
+	@Operation(summary = "Add an item to the cart", description = "Adds a product and quantity to the authenticated customer's shopping cart.")
 	public ApiResponse<CartResponse> addToCart(@Valid @RequestBody AddToCartRequest request, Authentication authentication) {
 
 		return new ApiResponse<>(true, "Item added to cart successfully",
@@ -37,12 +41,14 @@ public class CartController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Get the shopping cart", description = "Retrieves the current cart, its items, quantities, and totals.")
 	public ApiResponse<CartResponse> getCart(Authentication authentication) {
 
 		return new ApiResponse<>(true, "Cart retrieved successfully", cartService.getCart(authentication.getName()));
 	}
 
 	@PutMapping("/items/{itemId}")
+	@Operation(summary = "Update a cart item", description = "Changes the quantity or selection of an existing cart item.")
 	public ApiResponse<CartResponse> updateCartItem(@PathVariable Long itemId,
 			@Valid @RequestBody UpdateCartItemRequest request, Authentication authentication) {
 
@@ -51,6 +57,7 @@ public class CartController {
 	}
 
 	@DeleteMapping("/items/{itemId}")
+	@Operation(summary = "Remove a cart item", description = "Deletes a specific item from the authenticated customer's cart.")
 	public ApiResponse<String> removeCartItem(@PathVariable Long itemId, Authentication authentication) {
 
 		cartService.removeCartItem(itemId, authentication.getName());

@@ -15,10 +15,13 @@ import com.motoparts.seller.dto.SellerResponse;
 import com.motoparts.seller.service.SellerService;
 
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/sellers")
 @Validated
+@Tag(name = "Seller Profiles", description = "Apply to become a seller and maintain the seller profile")
 public class SellerController {
 
 	private final SellerService sellerService;
@@ -29,6 +32,7 @@ public class SellerController {
 	}
 
 	@PostMapping("/apply")
+	@Operation(summary = "Submit a seller application", description = "Creates a seller application for the authenticated account.")
 	public ApiResponse<SellerResponse> applyAsSeller(@Valid @RequestBody SellerApplicationRequest request,
 			Authentication authentication) {
 
@@ -38,6 +42,7 @@ public class SellerController {
 	}
 
 	@GetMapping("/me")
+	@Operation(summary = "Get my seller profile", description = "Retrieves the authenticated seller's profile and application status.")
 	public ApiResponse<SellerResponse> getMyProfile(Authentication authentication) {
 
 		SellerResponse response = sellerService.getMySellerProfile(authentication.getName());
@@ -46,6 +51,7 @@ public class SellerController {
 	}
 
 	@PutMapping("/me")
+	@Operation(summary = "Update my seller profile", description = "Updates business and contact information for the authenticated seller.")
 	public ApiResponse<SellerResponse> updateMyProfile(@Valid @RequestBody SellerApplicationRequest request,
 			Authentication authentication) {
 

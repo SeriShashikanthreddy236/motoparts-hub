@@ -18,9 +18,13 @@ import com.motoparts.inventory.service.InventoryService;
 import com.motoparts.response.ApiResponse;
 
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/inventory")
+@Tag(name = "Inventory", description = "Manage product stock levels and inspect stock movement")
 public class InventoryController {
 
 	private final InventoryService inventoryService;
@@ -31,12 +35,14 @@ public class InventoryController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Create inventory", description = "Creates the initial inventory record and stock level for a product.")
 	public ApiResponse<InventoryResponse> createInventory(@Valid @RequestBody InventoryRequest request) {
 
 		return new ApiResponse<>(true, "Inventory created successfully", inventoryService.createInventory(request));
 	}
 
 	@GetMapping("/product/{productId}")
+	@Operation(summary = "Get product inventory", description = "Retrieves the current stock information for a product.")
 	public ApiResponse<InventoryResponse> getInventoryByProduct(@PathVariable Long productId) {
 
 		return new ApiResponse<>(true, "Inventory fetched successfully",
@@ -44,6 +50,7 @@ public class InventoryController {
 	}
 
 	@PutMapping("/product/{productId}")
+	@Operation(summary = "Update product inventory", description = "Adjusts or replaces the stock settings for a product.")
 	public ApiResponse<InventoryResponse> updateInventory(@PathVariable Long productId,
 			@Valid @RequestBody InventoryRequest request) {
 
@@ -52,6 +59,7 @@ public class InventoryController {
 	}
 
 	@GetMapping("/{productId}/history")
+	@Operation(summary = "Get stock movement history", description = "Lists stock additions, deductions, and adjustments for a product.")
 	public ApiResponse<List<StockMovementResponse>> getStockHistory(@PathVariable Long productId) {
 
 		return new ApiResponse<>(true, "Stock history fetched successfully",
@@ -59,6 +67,7 @@ public class InventoryController {
 	}
 
 	@GetMapping("/low-stock")
+	@Operation(summary = "List low-stock products", description = "Returns products whose available quantity is at or below the configured threshold.")
 	public ApiResponse<List<LowStockResponse>> getLowStockProducts() {
 
 		return new ApiResponse<>(true, "Low stock products fetched successfully",
