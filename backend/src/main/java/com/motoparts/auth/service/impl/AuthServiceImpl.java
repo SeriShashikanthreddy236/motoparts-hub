@@ -16,6 +16,8 @@ import com.motoparts.auth.dto.response.AuthResponse;
 import com.motoparts.auth.dto.response.RefreshTokenResponse;
 import com.motoparts.auth.dto.response.UserResponse;
 import com.motoparts.auth.service.AuthService;
+import com.motoparts.exception.BusinessException;
+import com.motoparts.exception.ResourceNotFoundException;
 import com.motoparts.refresh.entity.RefreshToken;
 import com.motoparts.refresh.repository.RefreshTokenRepository;
 import com.motoparts.role.entity.Role;
@@ -59,11 +61,11 @@ public class AuthServiceImpl implements AuthService {
 
 		if (userRepository.existsByEmail(request.getEmail())) {
 
-			throw new RuntimeException("Email already exists");
+			throw new BusinessException("Email already exists");
 		}
 
 		Role customerRole = roleRepository.findByName(RoleName.CUSTOMER)
-				.orElseThrow(() -> new RuntimeException("Customer role not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Customer role not found"));
 
 		User user = new User();
 
@@ -108,16 +110,16 @@ public class AuthServiceImpl implements AuthService {
 	public AuthResponse login(LoginRequest request) {
 
 		User user = userRepository.findByEmail(request.getEmail())
-				.orElseThrow(() -> new RuntimeException("Invalid email or password"));
+				.orElseThrow(() -> new BusinessException("Invalid email or password"));
 
 		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 
-			throw new RuntimeException("Invalid email or password");
+			throw new BusinessException("Invalid email or password");
 		}
 
 		if (user.getAccountStatus() != AccountStatus.ACTIVE) {
 
-			throw new RuntimeException("Account is not active");
+			throw new BusinessException("Account is not active");
 		}
 		UserResponse userResponse = new UserResponse();
 
@@ -166,7 +168,7 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public UserResponse getCurrentUser(String email) {
 
-		User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
 		UserResponse response = new UserResponse();
 
@@ -192,16 +194,16 @@ public class AuthServiceImpl implements AuthService {
 	public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
 
 		RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(request.getRefreshToken())
-				.orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+				.orElseThrow(() -> new BusinessException("Invalid refresh token"));
 
 		if (refreshToken.getRevokedAt() != null) {
 
-			throw new RuntimeException("Refresh token revoked");
+			throw new BusinessException("Refresh token revoked");
 		}
 
 		if (refreshToken.getExpiresAt().isBefore(Instant.now())) {
 
-			throw new RuntimeException("Refresh token expired");
+			throw new BusinessException("Refresh token expired");
 		}
 
 		User user = refreshToken.getUser();
@@ -221,7 +223,7 @@ public class AuthServiceImpl implements AuthService {
 	public void logout(LogoutRequest request) {
 
 		RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(request.getRefreshToken())
-				.orElseThrow(() -> new RuntimeException("Refresh token not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Refresh token not found"));
 
 		refreshToken.setRevokedAt(Instant.now());
 

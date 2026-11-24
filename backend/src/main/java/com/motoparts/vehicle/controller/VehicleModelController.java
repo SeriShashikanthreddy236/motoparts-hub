@@ -2,13 +2,23 @@ package com.motoparts.vehicle.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.motoparts.response.ApiResponse;
 import com.motoparts.vehicle.dto.StatusRequest;
 import com.motoparts.vehicle.dto.VehicleModelRequest;
 import com.motoparts.vehicle.entity.VehicleModel;
 import com.motoparts.vehicle.service.VehicleModelService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/vehicle-models")
@@ -22,7 +32,7 @@ public class VehicleModelController {
 	}
 
 	@PostMapping
-	public ApiResponse<VehicleModel> createModel(@RequestBody VehicleModelRequest request) {
+	public ApiResponse<VehicleModel> createModel(@Valid @RequestBody VehicleModelRequest request) {
 
 		return new ApiResponse<>(true, "Vehicle model created successfully", vehicleModelService.createModel(request));
 	}
@@ -41,14 +51,14 @@ public class VehicleModelController {
 	}
 
 	@PutMapping("/{id}")
-	public ApiResponse<VehicleModel> updateModel(@PathVariable Long id, @RequestBody VehicleModelRequest request) {
+	public ApiResponse<VehicleModel> updateModel(@PathVariable Long id, @Valid @RequestBody VehicleModelRequest request) {
 
 		return new ApiResponse<>(true, "Vehicle model updated successfully",
 				vehicleModelService.updateModel(id, request));
 	}
 
 	@PatchMapping("/{id}/status")
-	public ApiResponse<VehicleModel> updateStatus(@PathVariable Long id, @RequestBody StatusRequest request) {
+	public ApiResponse<VehicleModel> updateStatus(@PathVariable Long id, @Valid @RequestBody StatusRequest request) {
 
 		return new ApiResponse<>(true, "Vehicle model status updated successfully",
 				vehicleModelService.updateModelStatus(id, request.getActive()));

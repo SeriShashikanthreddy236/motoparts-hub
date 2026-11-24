@@ -1,0 +1,17 @@
+package com.motoparts.cart.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.motoparts.cart.entity.Cart;
+import com.motoparts.cart.entity.CartItem;
+import com.motoparts.product.entity.Product;
+
+public interface CartItemRepository extends JpaRepository<CartItem, Long> {
+
+	List<CartItem> findByCart(Cart cart);
+
+	Optional<CartItem> findByCartAndProduct(Cart cart, Product product);
+}

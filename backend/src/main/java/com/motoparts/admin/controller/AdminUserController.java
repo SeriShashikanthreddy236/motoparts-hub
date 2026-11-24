@@ -16,6 +16,8 @@ import com.motoparts.admin.service.AdminUserService;
 import com.motoparts.auth.dto.response.UserResponse;
 import com.motoparts.response.ApiResponse;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/admin/users")
 @PreAuthorize("hasRole('ADMIN')")
@@ -43,7 +45,7 @@ public class AdminUserController {
 	@PatchMapping("/{id}/status")
 	public ApiResponse<UserResponse> updateAccountStatus(@PathVariable Long id,
 
-			@RequestBody UpdateAccountStatusRequest request) {
+			@Valid @RequestBody UpdateAccountStatusRequest request) {
 
 		return new ApiResponse<>(true, "User status updated successfully",
 				adminUserService.updateAccountStatus(id, request.getAccountStatus()));
@@ -52,7 +54,7 @@ public class AdminUserController {
 	@PatchMapping("/{id}/roles")
 	public ApiResponse<UserResponse> updateRoles(@PathVariable Long id,
 
-			@RequestBody UpdateRolesRequest request) {
+			@Valid @RequestBody UpdateRolesRequest request) {
 
 		return new ApiResponse<>(true, "User roles updated successfully",
 				adminUserService.updateRoles(id, request.getRoles()));

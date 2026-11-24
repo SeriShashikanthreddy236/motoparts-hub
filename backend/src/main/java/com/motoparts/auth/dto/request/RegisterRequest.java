@@ -1,11 +1,21 @@
 package com.motoparts.auth.dto.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class RegisterRequest {
 
+	@NotBlank
 	private String firstName;
+	@NotBlank
 	private String lastName;
+	@Email
+	@NotBlank
 	private String email;
 	private String phoneNumber;
+	@NotBlank
+	@Size(min = 6)
 	private String password;
 
 	public RegisterRequest() {

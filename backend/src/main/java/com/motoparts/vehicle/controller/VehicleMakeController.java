@@ -17,6 +17,8 @@ import com.motoparts.vehicle.dto.VehicleMakeRequest;
 import com.motoparts.vehicle.entity.VehicleMake;
 import com.motoparts.vehicle.service.VehicleMakeService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/vehicle-makes")
 public class VehicleMakeController {
@@ -29,7 +31,7 @@ public class VehicleMakeController {
 	}
 
 	@PostMapping
-	public ApiResponse<VehicleMake> createMake(@RequestBody VehicleMakeRequest request) {
+	public ApiResponse<VehicleMake> createMake(@Valid @RequestBody VehicleMakeRequest request) {
 
 		VehicleMake make = vehicleMakeService.createMake(request);
 
@@ -49,13 +51,13 @@ public class VehicleMakeController {
 	}
 
 	@PutMapping("/{id}")
-	public ApiResponse<VehicleMake> updateMake(@PathVariable Long id, @RequestBody VehicleMakeRequest request) {
+	public ApiResponse<VehicleMake> updateMake(@PathVariable Long id, @Valid @RequestBody VehicleMakeRequest request) {
 
 		return new ApiResponse<>(true, "Vehicle make updated successfully", vehicleMakeService.updateMake(id, request));
 	}
 
 	@PatchMapping("/{id}/status")
-	public ApiResponse<VehicleMake> updateStatus(@PathVariable Long id, @RequestBody StatusRequest request) {
+	public ApiResponse<VehicleMake> updateStatus(@PathVariable Long id, @Valid @RequestBody StatusRequest request) {
 
 		return new ApiResponse<>(true, "Vehicle make status updated successfully",
 				vehicleMakeService.updateMakeStatus(id, request.getActive()));

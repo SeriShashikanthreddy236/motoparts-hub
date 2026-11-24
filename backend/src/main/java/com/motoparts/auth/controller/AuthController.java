@@ -19,6 +19,8 @@ import com.motoparts.auth.dto.response.UserResponse;
 import com.motoparts.auth.service.AuthService;
 import com.motoparts.response.ApiResponse;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -32,13 +34,13 @@ public class AuthController {
 
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ApiResponse<UserResponse> register(@RequestBody RegisterRequest request) {
+	public ApiResponse<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
 
 		return new ApiResponse<>(true, "User registered successfully", authService.register(request));
 	}
 
 	@PostMapping("/login")
-	public ApiResponse<AuthResponse> login(@RequestBody LoginRequest request) {
+	public ApiResponse<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
 
 		return new ApiResponse<>(true, "Login successful", authService.login(request));
 	}
@@ -52,13 +54,13 @@ public class AuthController {
 	}
 
 	@PostMapping("/refresh")
-	public ApiResponse<RefreshTokenResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+	public ApiResponse<RefreshTokenResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
 
 		return new ApiResponse<>(true, "Token refreshed successfully", authService.refreshToken(request));
 	}
 
 	@PostMapping("/logout")
-	public ApiResponse<String> logout(@RequestBody LogoutRequest request) {
+	public ApiResponse<String> logout(@Valid @RequestBody LogoutRequest request) {
 
 		authService.logout(request);
 

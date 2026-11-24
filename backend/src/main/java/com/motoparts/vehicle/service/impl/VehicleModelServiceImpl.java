@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.motoparts.exception.ResourceNotFoundException;
 import com.motoparts.vehicle.constant.VehicleType;
 import com.motoparts.vehicle.dto.VehicleModelRequest;
 import com.motoparts.vehicle.entity.VehicleMake;
@@ -29,7 +30,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 	public VehicleModel createModel(VehicleModelRequest request) {
 
 		VehicleMake make = vehicleMakeRepository.findById(request.getMakeId())
-				.orElseThrow(() -> new RuntimeException("Vehicle make not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle make not found"));
 
 		VehicleModel model = new VehicleModel();
 
@@ -51,14 +52,14 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 	@Override
 	public VehicleModel getModelById(Long id) {
 
-		return vehicleModelRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle model not found"));
+		return vehicleModelRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Vehicle model not found"));
 	}
 
 	@Override
 	public VehicleModel updateModel(Long id, VehicleModelRequest request) {
 
 		VehicleModel model = vehicleModelRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Vehicle model not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle model not found"));
 
 		model.setName(request.getName());
 		model.setCode(request.getCode());
@@ -72,7 +73,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 	public VehicleModel updateModelStatus(Long id, Boolean active) {
 
 		VehicleModel model = vehicleModelRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Vehicle model not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle model not found"));
 
 		model.setActive(active);
 

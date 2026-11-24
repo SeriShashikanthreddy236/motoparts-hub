@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.motoparts.exception.BusinessException;
+import com.motoparts.exception.ResourceNotFoundException;
 import com.motoparts.vehicle.dto.VehicleMakeRequest;
 import com.motoparts.vehicle.entity.VehicleMake;
 import com.motoparts.vehicle.repository.VehicleMakeRepository;
@@ -24,7 +26,7 @@ public class VehicleMakeServiceImpl implements VehicleMakeService {
 
 		if (vehicleMakeRepository.existsByCode(request.getCode())) {
 
-			throw new RuntimeException("Vehicle make code already exists");
+			throw new BusinessException("Vehicle make code already exists");
 		}
 
 		VehicleMake make = new VehicleMake();
@@ -46,14 +48,14 @@ public class VehicleMakeServiceImpl implements VehicleMakeService {
 	@Override
 	public VehicleMake getMakeById(Long id) {
 
-		return vehicleMakeRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle make not found"));
+		return vehicleMakeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Vehicle make not found"));
 	}
 
 	@Override
 	public VehicleMake updateMake(Long id, VehicleMakeRequest request) {
 
 		VehicleMake make = vehicleMakeRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Vehicle make not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle make not found"));
 
 		make.setName(request.getName());
 		make.setCode(request.getCode());
@@ -66,7 +68,7 @@ public class VehicleMakeServiceImpl implements VehicleMakeService {
 	public VehicleMake updateMakeStatus(Long id, Boolean active) {
 
 		VehicleMake make = vehicleMakeRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Vehicle make not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle make not found"));
 
 		make.setActive(active);
 

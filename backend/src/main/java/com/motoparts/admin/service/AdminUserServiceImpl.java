@@ -7,10 +7,10 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.motoparts.auth.dto.response.UserResponse;
+import com.motoparts.exception.ResourceNotFoundException;
 import com.motoparts.role.entity.Role;
 import com.motoparts.role.enums.RoleName;
 import com.motoparts.role.repository.RoleRepository;
-
 import com.motoparts.user.entity.User;
 import com.motoparts.user.enums.AccountStatus;
 import com.motoparts.user.repository.UserRepository;
@@ -37,7 +37,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 	@Override
 	public UserResponse getUserById(Long userId) {
 
-		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
 		return mapToResponse(user);
 	}
@@ -45,7 +45,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 	@Override
 	public UserResponse updateAccountStatus(Long userId, String accountStatus) {
 
-		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
 		user.setAccountStatus(AccountStatus.valueOf(accountStatus));
 
@@ -57,14 +57,14 @@ public class AdminUserServiceImpl implements AdminUserService {
 	@Override
 	public UserResponse updateRoles(Long userId, Set<String> roles) {
 
-		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
 		Set<Role> userRoles = new HashSet<>();
 
 		for (String roleName : roles) {
 
 			Role role = roleRepository.findByName(RoleName.valueOf(roleName))
-					.orElseThrow(() -> new RuntimeException("Role not found"));
+					.orElseThrow(() -> new ResourceNotFoundException("Role not found"));
 
 			userRoles.add(role);
 		}

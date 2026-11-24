@@ -1,11 +1,23 @@
 package com.motoparts.product.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.motoparts.brand.entity.Brand;
+import com.motoparts.category.entity.Category;
+import com.motoparts.seller.entity.SellerProfile;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "products")
@@ -24,14 +36,30 @@ public class Product {
 	@Column(length = 1000)
 	private String description;
 
-	private String brand;
-
 	private Boolean active = true;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<ProductFitment> fitments = new ArrayList<>();
+	
+	@ManyToOne
+	@JoinColumn(name = "seller_id")
+	private SellerProfile seller;
 
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
+
+	@ManyToOne
+	@JoinColumn(name = "brand_id")
+	private Brand brand;
+
+	private String partNumber;
+
+	private BigDecimal mrp;
+
+	private BigDecimal sellingPrice;
+	
 	public Product() {
 	}
 
@@ -68,14 +96,6 @@ public class Product {
 		this.description = description;
 	}
 
-	public String getBrand() {
-		return brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
-
 	public Boolean getActive() {
 		return active;
 	}
@@ -90,6 +110,54 @@ public class Product {
 
 	public void setFitments(List<ProductFitment> fitments) {
 		this.fitments = fitments;
+	}
+	
+	public SellerProfile getSeller() {
+	    return seller;
+	}
+
+	public void setSeller(SellerProfile seller) {
+	    this.seller = seller;
+	}
+
+	public Category getCategory() {
+	    return category;
+	}
+
+	public void setCategory(Category category) {
+	    this.category = category;
+	}
+
+	public Brand getBrand() {
+	    return brand;
+	}
+
+	public void setBrand(Brand brand) {
+	    this.brand = brand;
+	}
+
+	public String getPartNumber() {
+	    return partNumber;
+	}
+
+	public void setPartNumber(String partNumber) {
+	    this.partNumber = partNumber;
+	}
+
+	public BigDecimal getMrp() {
+	    return mrp;
+	}
+
+	public void setMrp(BigDecimal mrp) {
+	    this.mrp = mrp;
+	}
+
+	public BigDecimal getSellingPrice() {
+	    return sellingPrice;
+	}
+
+	public void setSellingPrice(BigDecimal sellingPrice) {
+	    this.sellingPrice = sellingPrice;
 	}
 
 }

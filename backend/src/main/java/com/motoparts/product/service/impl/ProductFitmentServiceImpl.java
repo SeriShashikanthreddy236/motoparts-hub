@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.motoparts.exception.BusinessException;
+import com.motoparts.exception.ResourceNotFoundException;
 import com.motoparts.product.dto.ProductFitmentRequest;
+import com.motoparts.product.dto.ProductResponse;
 import com.motoparts.product.entity.Product;
 import com.motoparts.product.entity.ProductFitment;
 import com.motoparts.product.repository.ProductFitmentRepository;
@@ -32,20 +35,20 @@ public class ProductFitmentServiceImpl implements ProductFitmentService {
 	public ProductFitment createFitment(ProductFitmentRequest request) {
 
 		Product product = productRepository.findById(request.getProductId())
-				.orElseThrow(() -> new RuntimeException("Product not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
 		VehicleVariant variant = vehicleVariantRepository.findById(request.getVehicleVariantId())
-				.orElseThrow(() -> new RuntimeException("Vehicle variant not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle variant not found"));
 
 		if (request.getMinYear() > request.getMaxYear()) {
 
-			throw new RuntimeException("Invalid year range");
+			throw new BusinessException("Invalid year range");
 		}
 
 		if (productFitmentRepository.existsByProductIdAndVehicleVariantIdAndMinYearAndMaxYear(request.getProductId(),
 				request.getVehicleVariantId(), request.getMinYear(), request.getMaxYear())) {
 
-			throw new RuntimeException("Fitment already exists");
+			throw new BusinessException("Fitment already exists");
 		}
 
 		ProductFitment fitment = new ProductFitment();
@@ -75,8 +78,9 @@ public class ProductFitmentServiceImpl implements ProductFitmentService {
 	public void deleteFitment(Long id) {
 
 		ProductFitment fitment = productFitmentRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Fitment not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Fitment not found"));
 
 		productFitmentRepository.delete(fitment);
 	}
+
 }

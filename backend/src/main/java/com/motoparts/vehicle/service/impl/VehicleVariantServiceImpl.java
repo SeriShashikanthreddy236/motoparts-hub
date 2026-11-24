@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.motoparts.exception.ResourceNotFoundException;
 import com.motoparts.vehicle.constant.FuelType;
 import com.motoparts.vehicle.constant.TransmissionType;
 import com.motoparts.vehicle.dto.VehicleVariantRequest;
@@ -30,7 +31,7 @@ public class VehicleVariantServiceImpl implements VehicleVariantService {
 	public VehicleVariant createVariant(VehicleVariantRequest request) {
 
 		VehicleModel model = vehicleModelRepository.findById(request.getModelId())
-				.orElseThrow(() -> new RuntimeException("Vehicle model not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle model not found"));
 
 		VehicleVariant variant = new VehicleVariant();
 
@@ -61,14 +62,14 @@ public class VehicleVariantServiceImpl implements VehicleVariantService {
 	public VehicleVariant getVariantById(Long id) {
 
 		return vehicleVariantRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Vehicle variant not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle variant not found"));
 	}
 
 	@Override
 	public VehicleVariant updateVariant(Long id, VehicleVariantRequest request) {
 
 		VehicleVariant variant = vehicleVariantRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Vehicle variant not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle variant not found"));
 
 		variant.setName(request.getName());
 		variant.setEngineCapacityCc(request.getEngineCapacityCc());
@@ -88,7 +89,7 @@ public class VehicleVariantServiceImpl implements VehicleVariantService {
 	public VehicleVariant updateVariantStatus(Long id, Boolean active) {
 
 		VehicleVariant variant = vehicleVariantRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Vehicle variant not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vehicle variant not found"));
 
 		variant.setActive(active);
 

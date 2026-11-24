@@ -14,4 +14,7 @@ public interface ProductFitmentRepository extends JpaRepository<ProductFitment, 
 
 	boolean existsByProductIdAndVehicleVariantIdAndMinYearAndMaxYear(Long productId, Long vehicleVariantId,
 			Integer minYear, Integer maxYear);
+
+	List<ProductFitment> findByVehicleVariantIdAndMinYearLessThanEqualAndMaxYearGreaterThanEqual(Long variantId,
+			Integer minYear, Integer maxYear);
 }
